@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Forms;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace SpriteSheetCreator
 {
@@ -71,8 +72,11 @@ namespace SpriteSheetCreator
 
         private void Columns_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            if (Canvas == null)
+                return;
+
             Columns = (int)Math.Round(ColumnsSlider.Value);
-            Rows = (int)Math.Ceiling((Files.Length * 1d) / (Columns * 1d));
+            Rows = (int)Math.Ceiling((Canvas.Images.Length * 1d) / (Columns * 1d));
 
             if (Canvas != null)
             {
@@ -86,6 +90,30 @@ namespace SpriteSheetCreator
         private void HorizontalFlip_Click(object sender, RoutedEventArgs e)
         {
             FlipHorizontally = (bool)HorizontalFlip.IsChecked;
+
+            Canvas.InvalidateVisual();
+        }
+
+        private void OpenGif_Click(object sender, RoutedEventArgs e)
+        {
+            using (var dialog = new OpenFileDialog())
+            {
+                dialog.Multiselect = false;
+                dialog.Filter = "|*.gif";
+
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    Canvas.LoadFromGif(dialog.FileName);
+
+                    ColumnsSlider.Maximum = ColumnsSlider.Value = Canvas.Images.Length;
+                    ColumnsSlider.Minimum = 1;
+                    Rows = 1;
+                }
+            }
+
+            Canvas.UpdateSize();
+
+            ScaleText.Content = Math.Floor(Scale * 100) + "%" + ((double.IsNaN(Canvas.Width)) ? "" : (" (" + (int)Canvas.Width + "x" + (int)Canvas.Height + ")"));
 
             Canvas.InvalidateVisual();
         }
@@ -105,6 +133,37 @@ namespace SpriteSheetCreator
             ScaleText.Content = Math.Floor(Scale * 100) + "%" + ((double.IsNaN(Canvas.Width)) ? "" : (" (" + (int)Canvas.Width + "x" + (int)Canvas.Height + ")"));
 
             Canvas.InvalidateVisual();
+        }
+
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Canvas.RemoveColor(GetPixelColor(this.PointToScreen(e.GetPosition(this))));
+
+            Canvas.InvalidateVisual();
+        }
+
+        [DllImport("gdi32")]
+        private static extern int GetPixel(int hdc, int nXPos, int nYPos);
+
+        [DllImport("user32")]
+        private static extern int GetWindowDC(int hwnd);
+
+        [DllImport("user32")]
+        private static extern int ReleaseDC(int hWnd, int hDC);
+
+        private static Color GetPixelColor(Point point)
+        {
+            int lDC = GetWindowDC(0);
+            int intColor = GetPixel(lDC, (int)point.X, (int)point.Y);
+
+            ReleaseDC(0, lDC);
+
+            byte a = (byte)((intColor >> 0x18) & 0xffL);
+            byte b = (byte)((intColor >> 0x10) & 0xffL);
+            byte g = (byte)((intColor >> 8) & 0xffL);
+            byte r = (byte)(intColor & 0xffL);
+
+            return Color.FromRgb(r, g, b);
         }
     }
 }

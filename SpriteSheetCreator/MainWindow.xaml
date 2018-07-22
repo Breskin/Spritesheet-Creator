@@ -7,20 +7,22 @@
         mc:Ignorable="d"
         Title="SpritesheetCreator" Width="768" Height="640" MinWidth="768" MinHeight="500">
     <Grid>
-        <Button x:Name="Generate" Content="Save" Margin="0,0,12,10" Click="Generate_Click" HorizontalAlignment="Right" Width="75" Height="20" VerticalAlignment="Bottom"/>
+        <Button x:Name="Generate" Content="Save" Margin="0,0,12,3" Click="Generate_Click" HorizontalAlignment="Right" Width="75" Height="20" VerticalAlignment="Bottom"/>
         <Slider x:Name="ColumnsSlider" HorizontalAlignment="Left" Margin="74,0,0,38" Width="340" ValueChanged="Columns_ValueChanged" SmallChange="1" Minimum="1" Maximum="1" Height="18" VerticalAlignment="Bottom"/>
         <Slider x:Name="ScaleSlider" HorizontalAlignment="Left" Margin="74,0,0,12" Width="340" ValueChanged="Scale_ValueChanged" Maximum="1" Height="18" VerticalAlignment="Bottom"/>
         <Label Content="Columns:" Margin="10,0,0,36" Height="26" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="59"/>
         <Label Content="Scale:" HorizontalAlignment="Left" Margin="10,0,0,10" Height="26" VerticalAlignment="Bottom"/>
-        <Button x:Name="OpenFolder" Content="Open folder" Margin="0,0,12,33" Click="OpenFolder_Click" HorizontalAlignment="Right" Width="75" Height="20" VerticalAlignment="Bottom"/>
-        <ScrollViewer x:Name="ScrollViewer" Margin="10,10,10,67" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <Grid x:Name="Grid" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+        <Button x:Name="OpenFolder" Content="Open folder" Margin="0,0,12,26" Click="OpenFolder_Click" HorizontalAlignment="Right" Width="75" Height="20" VerticalAlignment="Bottom"/>
+        <ScrollViewer x:Name="ScrollViewer" Margin="10,10,10,74" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <Grid x:Name="Grid" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" MouseDown="Grid_MouseDown"/>
 
         </ScrollViewer>
         <Label x:Name="ColumnsText" Content="" HorizontalAlignment="Left" Margin="419,0,0,34" Height="26" VerticalAlignment="Bottom"/>
         <Label x:Name="ScaleText" Content="" HorizontalAlignment="Left" Margin="419,0,0,8" Height="26" VerticalAlignment="Bottom"/>
-        <CheckBox x:Name="HorizontalFlip" Content="Flip horizontally" HorizontalAlignment="Right" Margin="0,0,99,35" Click="HorizontalFlip_Click" Height="15" VerticalAlignment="Bottom"/>
-        <CheckBox x:Name="VerticalFlip" Content="Flip vertically" Margin="0,0,115,12" Click="VerticalFlip_Click" HorizontalAlignment="Right" Width="88" Height="15" VerticalAlignment="Bottom"/>
+        <CheckBox x:Name="HorizontalFlip" Content="Flip horizontally" HorizontalAlignment="Right" Margin="0,0,100,41" Click="HorizontalFlip_Click" Height="15" VerticalAlignment="Bottom"/>
+        <CheckBox x:Name="VerticalFlip" Content="Flip vertically" Margin="0,0,116,16" Click="VerticalFlip_Click" HorizontalAlignment="Right" Width="88" Height="16" VerticalAlignment="Bottom"/>
+        <Button x:Name="OpenGif" Content="Open gif" Margin="0,0,12,49" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="OpenGif_Click"/>
+        <TextBlock Margin="149,0,0,58" TextWrapping="Wrap" Text="Click on color to make it transparent" Height="16" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="205" FontSize="11" Opacity="0.6" RenderTransformOrigin="0.644,0.594"/>
 
     </Grid>
 </Window>
